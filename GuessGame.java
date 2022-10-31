@@ -145,7 +145,7 @@ public class GuessGame {
                         System.out.println("Your guess, " + playeNumber + ", is too low");
 
                     if (history()) {
-                        // System.out.println("Last Guesses " + playeNumber + ", is too high");
+                        showhistory();
                     }
                     nbErrors--;
                     playerTries++;
