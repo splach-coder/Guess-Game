@@ -116,15 +116,22 @@ public class GuessGame {
             String lvl = "e";
             int option = 0;
 
-            while (lvl == "e" && lvl == "h") {
+            while (true) {
                 System.out.println("Pick a Level (e => easy AND h => hard) (other letters not accecible) :");
                 lvl = input.nextLine();
+
+                if(lvl.equals("e") || lvl.equals("h")){
+                    break;
+                }
             }
 
-            while (option != 1 || option != 2 || option != 3) {
+            while (true) {
                 System.out.println("Pick option (1 OR 2 OR 3) (other numbers not accecible) : ");
-                input.nextLine();
                 option = input.nextInt();
+
+                if(option == 1 || option == 2 ||  option == 3){
+                    break;
+                }
             }
 
             newGame(option, lvl);
