@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class GuessGame {
@@ -7,6 +9,12 @@ public class GuessGame {
 
     // options
     private int option;
+
+    // game level
+    private String level;
+
+    // history
+    private List<Integer> counter = new ArrayList<Integer>();
 
     // maximum tries
     private final int MaxErros = 8;
@@ -35,13 +43,16 @@ public class GuessGame {
         return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    public void newGame(int opt) {
+    public void newGame(int opt, String level) {
         // get the option
         option = opt;
+
+        this.level = level;
 
         // initialise the player tries
         nbErrors = MaxErros;
 
+        // player tries
         playerTries = 1;
 
         // generate new number
@@ -55,7 +66,8 @@ public class GuessGame {
     public void GameWinner() {
         if (nbErrors > 0) {
             System.out
-                    .println("It took you " + playerTries + " turns to guess my number, which was " + chosenNumber + ".");
+                    .println("It took you " + playerTries + " turns to guess my number, which was " + chosenNumber
+                            + ".");
         }
     }
 
@@ -83,15 +95,33 @@ public class GuessGame {
         return "Pick a number between " + min + " and " + max + ". ";
     }
 
+    // history or not
+    public boolean history() {
+        if (this.level == "e")
+            return true;
+        else
+            return false;
+    }
+
+    public void showhistory() {
+        System.out.println("--------------");
+        System.out.println("|   History   |");
+        System.out.println("--------------");
+        for (int cpt : counter) {
+            System.out.println("|    " + cpt + "    |");
+        }
+        System.out.println("--------------");
+    }
+
     public void Play() {
         try (Scanner input = new Scanner(System.in)) {
 
             System.out.println("Pick a Level (e => easy AND h => hard): ");
-            // String level = input.nextLine();
+            String lvl = input.nextLine();
             System.out.println("Pick option (1 OR 2 OR 3): ");
             int option = input.nextInt();
 
-            newGame(option);
+            newGame(option, lvl);
 
             System.out.println(chosenNumber);
 
@@ -102,6 +132,7 @@ public class GuessGame {
 
             // we'll iterate intil we found the number or not
             while (nbErrors > 0) {
+                counter.add(playeNumber);
                 // check if the number found or not
                 if (!foundNumber(playeNumber)) {
                     System.out.println(MaxMin(option) +
@@ -113,16 +144,19 @@ public class GuessGame {
                     else
                         System.out.println("Your guess, " + playeNumber + ", is too low");
 
+                    if (history()) {
+                        // System.out.println("Last Guesses " + playeNumber + ", is too high");
+                    }
                     nbErrors--;
                     playerTries++;
                     Lost();
-                    
+
                 } else {
                     GameWinner();
                     break;
                 }
             }
-            
+
         }
     }
 
