@@ -22,8 +22,6 @@ public class GuessGame {
     // player tries
     private int nbErrors;
 
-    private int playerTries = 0;
-
     // Generate Number
     public int Generate_number() {
         int min, max;
@@ -50,10 +48,7 @@ public class GuessGame {
         this.level = level;
 
         // initialise the player tries
-        nbErrors = MaxErros;
-
-        // player tries
-        playerTries = 1;
+        nbErrors = 0;
 
         // generate new number
         chosenNumber = Generate_number();
@@ -64,17 +59,19 @@ public class GuessGame {
     }
 
     public void GameWinner() {
-        if (nbErrors > 0) {
+        if (nbErrors < MaxErros) {
             System.out
-                    .println("It took you " + playerTries + " turns to guess my number, which was " + chosenNumber
+                    .println("It took you " + (nbErrors + 1) + " turns to guess my number, which was " + chosenNumber
                             + ".");
         }
     }
 
-    public void Lost() {
-        if (nbErrors == MaxErros) {
+    public boolean Lost() {
+        if (nbErrors == 8) {
             System.out.println("Oops!! No turns left. My number was " + chosenNumber + ".");
+            return true;
         }
+        return false;
     }
 
     public String MaxMin(int opt) {
@@ -97,7 +94,7 @@ public class GuessGame {
 
     // history or not
     public boolean history() {
-        if (this.level == "e")
+        if (this.level.toLowerCase().equals("e"))
             return true;
         else
             return false;
@@ -121,6 +118,8 @@ public class GuessGame {
             System.out.println("Pick option (1 OR 2 OR 3): ");
             int option = input.nextInt();
 
+            System.out.println("ur level is : " + lvl);
+
             newGame(option, lvl);
 
             System.out.println(chosenNumber);
@@ -131,13 +130,11 @@ public class GuessGame {
             int playeNumber = input.nextInt();
 
             // we'll iterate intil we found the number or not
-            while (nbErrors > 0) {
+            while (nbErrors < MaxErros) {
                 counter.add(playeNumber);
+
                 // check if the number found or not
                 if (!foundNumber(playeNumber)) {
-                    System.out.println(MaxMin(option) +
-                            "You have " + nbErrors + " turns.");
-                    playeNumber = input.nextInt();
 
                     if (playeNumber > chosenNumber)
                         System.out.println("Your guess, " + playeNumber + ", is too high");
@@ -147,14 +144,20 @@ public class GuessGame {
                     if (history()) {
                         showhistory();
                     }
-                    nbErrors--;
-                    playerTries++;
-                    Lost();
+
+                    nbErrors++;
+
+                    if (Lost())
+                        break;
 
                 } else {
                     GameWinner();
                     break;
                 }
+
+                System.out.println(MaxMin(option) +
+                        "You have " + (MaxErros - nbErrors) + " turns.");
+                playeNumber = input.nextInt();
             }
 
         }
