@@ -113,16 +113,21 @@ public class GuessGame {
     public void Play() {
         try (Scanner input = new Scanner(System.in)) {
 
-            System.out.println("Pick a Level (e => easy AND h => hard): ");
-            String lvl = input.nextLine();
-            System.out.println("Pick option (1 OR 2 OR 3): ");
-            int option = input.nextInt();
+            String lvl = "e";
+            int option = 0;
 
-            System.out.println("ur level is : " + lvl);
+            while (lvl == "e" && lvl == "h") {
+                System.out.println("Pick a Level (e => easy AND h => hard) (other letters not accecible) :");
+                lvl = input.nextLine();
+            }
+
+            while (option != 1 || option != 2 || option != 3) {
+                System.out.println("Pick option (1 OR 2 OR 3) (other numbers not accecible) : ");
+                input.nextLine();
+                option = input.nextInt();
+            }
 
             newGame(option, lvl);
-
-            System.out.println(chosenNumber);
 
             System.out.println(MaxMin(option) +
                     "You will have " + MaxErros + " turns.");
