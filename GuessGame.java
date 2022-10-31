@@ -14,7 +14,8 @@ public class GuessGame {
     private String level;
 
     // history
-    private List<Integer> counter = new ArrayList<Integer>();
+    private List<Integer> Low_counter = new ArrayList<Integer>();
+    private List<Integer> High_counter = new ArrayList<Integer>();
 
     // maximum tries
     private final int MaxErros = 8;
@@ -101,13 +102,21 @@ public class GuessGame {
     }
 
     public void showhistory() {
-        System.out.println("--------------");
-        System.out.println("|   History   |");
-        System.out.println("--------------");
-        for (int cpt : counter) {
-            System.out.println("|    " + cpt + "    |");
+        System.out.println("------------------------------");
+        System.out.println("|           History           |");
+        System.out.println("------------------------------");
+        System.out.println("| Low Guesses  | High Guesses |");
+        System.out.println("------------------------------");
+        int max = (Low_counter.size() > High_counter.size()) ? Low_counter.size() :  High_counter.size();
+        for(int i = 0; i < max; i++){
+            try {
+                System.out.println("|   "+Low_counter.get(i)+"   |   "+High_counter.get(i)+"   |");
+            } catch(Exception e){}
         }
-        System.out.println("--------------");
+        // for (int cpt : Low_counter) {
+        //     System.out.println("|    " + cpt + "    |");
+        // }
+        System.out.println("------------------------------");
     }
 
     public void Play() {
@@ -120,7 +129,7 @@ public class GuessGame {
                 System.out.println("Pick a Level (e => easy AND h => hard) (other letters not accecible) :");
                 lvl = input.nextLine();
 
-                if(lvl.equals("e") || lvl.equals("h")){
+                if (lvl.equals("e") || lvl.equals("h")) {
                     break;
                 }
             }
@@ -129,7 +138,7 @@ public class GuessGame {
                 System.out.println("Pick option (1 OR 2 OR 3) (other numbers not accecible) : ");
                 option = input.nextInt();
 
-                if(option == 1 || option == 2 ||  option == 3){
+                if (option == 1 || option == 2 || option == 3) {
                     break;
                 }
             }
@@ -143,16 +152,16 @@ public class GuessGame {
 
             // we'll iterate intil we found the number or not
             while (nbErrors < MaxErros) {
-                counter.add(playeNumber);
-
                 // check if the number found or not
                 if (!foundNumber(playeNumber)) {
 
-                    if (playeNumber > chosenNumber)
+                    if (playeNumber > chosenNumber) {
                         System.out.println("Your guess, " + playeNumber + ", is too high");
-                    else
+                        High_counter.add(playeNumber);
+                    } else {
                         System.out.println("Your guess, " + playeNumber + ", is too low");
-
+                        Low_counter.add(playeNumber);
+                    }
                     if (history()) {
                         showhistory();
                     }
