@@ -16,6 +16,6 @@ public class Main {
         System.out.println("\t3- -1000 and 1000\t\t\t\t3- -1000 and 1000");
 
         GuessGame game = new GuessGame();
-        game.Play();
+        game.start();
     }
 }
