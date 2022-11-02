@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class GuessGame {
 
@@ -114,8 +115,15 @@ public class GuessGame {
         int max = (Low_counter.size() > High_counter.size()) ? Low_counter.size() : High_counter.size();
         for (int i = 0; i < max; i++) {
             try {
-                System.out.println("|   " + Low_counter.get(i) + "   |   " + High_counter.get(i) + "   |");
+                System.out.print("|        " + Low_counter.get(i) + "     |   ");
             } catch (Exception e) {
+                System.out.print("|            | ");
+            }
+
+            try {
+                System.out.println(High_counter.get(i) + "           |");
+            } catch (Exception e) {
+                System.out.println("               | ");
             }
         }
         // for (int cpt : Low_counter) {
@@ -149,6 +157,8 @@ public class GuessGame {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+
+        start();
     }
 
     public void start() {
@@ -170,12 +180,28 @@ public class GuessGame {
             } else if (game_section == 2) {
                 highscore();
             } else if (game_section == 3) {
-                System.out.println("\n\nbad for U\n\n");
-                System.out.println("\n\nmade by anas\n\n");
+                ending();
                 return;
             }
 
         } catch (Exception e) {
+        }
+    }
+
+    private void ending() throws InterruptedException {
+        try {
+            File myObj = new File("C:\\Users\\anasb\\guess-number-Game\\ending.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                System.out.println("\t\t\t\t" + data);
+                long timeout = 1;
+                TimeUnit.SECONDS.sleep(timeout);
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
     }
 
@@ -184,6 +210,13 @@ public class GuessGame {
 
             System.out.print("Enter ur user-name : ");
             String user_name = input.nextLine();
+
+            System.out.println("Pick a Level :\n");
+            System.out.println("Easy\t\t\t\t\t\tHard\n");
+            System.out.println("(Show previous guesses)\t\t\t\t(Don't show guesses)\n");
+            System.out.println("\t1- 1 and 10\t\t\t\t\t1- 1 and 10");
+            System.out.println("\t2- 1 and 100\t\t\t\t\t2- 1 and 100");
+            System.out.println("\t3- -1000 and 1000\t\t\t\t3- -1000 and 1000");
 
             String lvl = "e";
             int option = 0;
@@ -245,6 +278,7 @@ public class GuessGame {
             }
 
             saveuser(user_name, 80 - ((nbErrors + 1) * 10));
+            start();
         }
     }
 
